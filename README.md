@@ -1,13 +1,7 @@
 # Flipkart-Grid-2.0-Invoice-Processor
 ## Solution overview
-<strong> Essentially we have created an API solution for FLIPKART which can be used in order to extract all the data from an invoice in a very efficient manner and it has been configured by using a DATABASE (DynamoDB) in order to maintain integrity of information and at the same time provide efficient and accurate results. The above solution is coupled along with a simple frontend and a python notebook which will obtain all the results and convert them into the required excel file which can then be provided to the customer. In this manner, essentially all the data which was present in the invoice is converted into an excel sheet. The solution is highly reliable because it makes use of AWS and it has been configured in a manner that it provides accurate and efficient result to the user. It provides the user with a frontend which is a major plus point as the user does not have to go through the hassle of opening the AWS console but can simply run a few CLI based commands. </strong>It is straightforward to invoke this API from AWS CLI or using Boto3 Python library and pass either a pointer to the document image stored in S3 or the raw image bytes to obtain results. However handling large volumes of documents this way becomes impractical for several reasons:<br>
-<ul>
-  <li>Making a synchronous call to query Textract API is not possible for multi-page PDF documents</li>
-  <li>Synchronous call will exceed provisioned throughput if used for a large number of documents within a short period of time</li>
-  <li>If multiple queries with same document is needed, triggering multiple Textract API invocation rapidly increases the cost</li>
-  <li>Textract sends analysis results with rich metadata, but the strucutres of tables, forms and texts are not immediately apparent without some post-processing.</li>
-</ul><br>
-In Textract Enhancer solution, following approaches are used to provide for a more robust end to end solution.<br>
+<strong> Essentially we have created an API solution for FLIPKART which can be used in order to extract all the data from an invoice in a very efficient manner and it has been configured by using a DATABASE (DynamoDB) in order to maintain integrity of information and at the same time provide efficient and accurate results. The above solution is coupled along with a simple frontend and a python notebook which will obtain all the results and convert them into the required excel file which can then be provided to the customer. In this manner, essentially all the data which was present in the invoice is converted into an excel sheet. The solution is highly reliable because it makes use of AWS and it has been configured in a manner that it provides accurate and efficient result to the user. It provides the user with a frontend which is a major plus point as the user does not have to go through the hassle of opening the AWS console but can simply run a few CLI based commands. </strong>It is straightforward to invoke this API from AWS CLI or using Boto3 Python library and pass either a pointer to the document image stored in S3 or the raw image bytes to obtain results.
+In this Invoice processor solution, following approaches are used to provide for a more robust end to end solution.<br>
 <ul>
   <li>Lambda functions triggered by document upload to specific S3 bucket to submit document analysis and text detection jobs to Textract</li>
   <li>API Gateway methods to trigger Textract job submission on-demand</li>
@@ -17,7 +11,6 @@ In Textract Enhancer solution, following approaches are used to provide for a mo
   <li>Job status and metadata tracked in DynamoDB table, allowing for troubleshooting and easy querying of results</li>
   <li>API Gateway methods to retrieve results anytime without having to use Textract</li>
 </ul><br>
- </div>
   
 Follow the below given steps in order to understand how to install the entire infrastrcture of this solution of invoice processing.<br>
 If you are <strong>`testing`</strong> the given project, then head over to <strong>`SECTION B`</strong> but if you are looking at<br>
@@ -51,7 +44,16 @@ You can test the API by heading over to the AWS API Gateway and by clicking on t
   <li>Textract Job start by API Invocation: If you already have documents present in bucket, or not the owner of the bucket, you can still trigger the same workflow as above, by sending a request to Rest API method as follows: https://deployment-id.execute-api.us-east-1.amazonaws.com/demo/submittextanalysisjob?Bucket=your-bucket-name&Document=your-document-key You can find the deployment-id of the API from the stack output.</li><br>
  <li>Textract result retrieval via Rest API: If the initial submission goes well, and does not exceed provisioned throughput for maximum number of trials, result will be ready and post-processed within few seconds to minutes. At that point, the document analysis result can be retrieved by invoking Rest API method as follows: https://deployment-id.execute-api.us-east-1.amazonaws.com/demo/retrievedocumentanalysisresult?Bucket=your-bucket-name&Document=your-document-key&ResultType=ALL|TABLE|FORM. Similarly text detection result can be obtained by invoking Rest API method as follows: https://deployment-id.execute-api.us-east-1.amazonaws.com/demo/retrievetextdetectionresult?Bucket=your-bucket-name&Document=your-document-key You can find the deployment-id of the API from the stack output. In both cases, the API response will contain a list of files on S3 bucket where the results are stored for future use. You can also download and open the result files, either to inspect the contents manually, or to feed in to some downstream application/processes, as needed. </li>
  </ul>
- <div>
 <strong> Step 6: Clone the Fronend in order to upload the invoice to s3 via an interface</strong><br>
-Click on the sub-repository named "Frontend" or click <a href="https://github.com/charansoneji/Flipkart-Grid-Invoice-Processor/tree/master/Frontend">here</a>.Clone the repo and make sure to install packages `express`, `aws-sdk` and `jade`. You can then run the command `node app.js` but you can find further instructions in the README given in that folder. <br>
-</div>
+Click on the sub-repository named "Frontend" or click <a href="http://github.com/charansoneji/Flipkart-Grid-Invoice-Processor/tree/master/Frontend/">here.</a>
+Clone the repo and make sure to install packages `express`, `aws-sdk` and `jade`. You can then run the command `node app.js` but you can find further instructions in the README given in that folder. <br>
+<strong> Step 7: Test the API and retrieve all data in required format</strong><br>
+So after you have uploaded the file to the S3 bucket using the frontend from Step 6, open the subrepository named Retrieve data and run the Python notebook.In case, you do not use Jupyter Notebook, you can run it on a normal python IDE but make sure to have these modules installed
+<ul>
+  <li>JSON</li>
+  <li>Pandas</li>
+  <li>Xlsxwriter</li>
+  <li>requests</li>
+  <li>openpysql</li>
+</ul>
+You may use `pip` to install these libaries or could also use `conda install` to get these libraries installed.
