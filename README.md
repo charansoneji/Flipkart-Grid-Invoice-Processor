@@ -68,3 +68,12 @@ This is the easy step, all the config files containing the Secret Access Key and
 - Once you have received the upload success, wait for a couple of minutes before running the Output to Excel notbook or python file. and you should be able to see an excel sheet labelles as *invoice.xlsx* in the same directory.
 - In case you are using **POSTMAN** in order to obtain the results, use the REST API links given and copy the AWS credentials and mention them in the authentication section given [here]("https://github.com/charansoneji/Flipkart-Grid-Invoice-Processor/blob/master/Frontend/config.json").
 
+**Step 8: Get the json data to the actual invoice template excel sheet**<br>
+So, once we get the link, the user can run one python file that is available [here](https://github.com/charansoneji/Flipkart-Grid-Invoice-Processor/tree/master/Retrieve%20Data).
+The user has to input the link and then all the details will be seen in the **invoice.xlsx**. There are 4 steps that will be taking place when you run the python file.
+- The form data that is present in the json format will be extracted and added in a temporary excel sheet, named Sheet2.xlsx.
+- Then the data from the temporary sheet will be automatically added to the **invoice.xlsx** according to the "if" conditions mentioned in the code. These conditions can always be edited for future invoices with different templates.
+- Then we'll move on to the tabular data available. The tabular data will be available in the json format just like the form data. So again we will extract the required data from the json link and then save it in a temporary temporary excel sheet, named Sheet1.xlsx.
+- Now again the data from that temporary sheet will be automatically added to the **invoice.xlsx** according to the "if" conditions mentioned in the code. And even these conditions can always be edited for future invoices with different templates.
+- After running the code, when you open **invoice.xlsx**, you will be able to see all the data that has been extracted and added in the excel sheet.<br>
+I hope this helps you!
