@@ -31,5 +31,27 @@ Make sure to copy the entire JSON file and add the name of your required buckets
 ###### Note: I have created the entire template based on the architecture that I had planned. You can adjust the JSON according to your requirement. The JSON is a very easy representation the architecture planned by me. It creates the roles required along with the database and the S3 bucket which would be needed. 
 <strong> Step 3: Cross check if all the resources have been successfully deployed by refreshing the Cloud Formation page and looking for the `Stack Created` option.</strong><br>
 This is an important step and if any error occurs during this stage, an immediate rollback shall occur which would mean that the resources that have been created are being destroyed. At this stage, you would have to check your IAM policies and make sure that the user has sufficient access. You can click <a href="https://aws.amazon.com/iam/">here</a> to understand more about the IAM policies.<br>
-<strong> Step 4: You need to modify your CORS configuration in your S3 bucket. So head over to the S3 console and add the following configuration to your CORS config..</strong><br>
-You need to 
+<strong> Step 4: You need to modify your CORS configuration in your S3 bucket. So head over to the S3 console and add the following configuration to your CORS config.</strong><br>
+You need to head on to the s3 bucket and in "Permissions", click on CORS configuration and copy paste the below given config:<br>
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+   <CORSRule>
+        <AllowedOrigin>*</AllowedOrigin>
+        <AllowedMethod>GET</AllowedMethod>
+        <AllowedMethod>POST</AllowedMethod>
+        <AllowedMethod>PUT</AllowedMethod>
+        <AllowedHeader>*</AllowedHeader>
+    </CORSRule>
+</CORSConfiguration>
+```
+<strong> Step 5: Testing the API gateway</strong><br>
+You can test the API by heading over to the AWS API Gateway and by clicking on the API created using the url and making use of any of the below given links:<br>
+<ul>
+  <li>Textract Job start by API Invocation: If you already have documents present in bucket, or not the owner of the bucket, you can still trigger the same workflow as above, by sending a request to Rest API method as follows: https://deployment-id.execute-api.us-east-1.amazonaws.com/demo/submittextanalysisjob?Bucket=your-bucket-name&Document=your-document-key You can find the deployment-id of the API from the stack output.</li><br>
+ <li>Textract result retrieval via Rest API: If the initial submission goes well, and does not exceed provisioned throughput for maximum number of trials, result will be ready and post-processed within few seconds to minutes. At that point, the document analysis result can be retrieved by invoking Rest API method as follows: https://deployment-id.execute-api.us-east-1.amazonaws.com/demo/retrievedocumentanalysisresult?Bucket=your-bucket-name&Document=your-document-key&ResultType=ALL|TABLE|FORM. Similarly text detection result can be obtained by invoking Rest API method as follows: https://deployment-id.execute-api.us-east-1.amazonaws.com/demo/retrievetextdetectionresult?Bucket=your-bucket-name&Document=your-document-key You can find the deployment-id of the API from the stack output. In both cases, the API response will contain a list of files on S3 bucket where the results are stored for future use. You can also download and open the result files, either to inspect the contents manually, or to feed in to some downstream application/processes, as needed. </li>
+ </ul>
+ <div>
+<strong> Step 6: Clone the Fronend in order to upload the invoice to s3 via an interface</strong><br>
+Click on the sub-repository named "Frontend" or click <a href="https://github.com/charansoneji/Flipkart-Grid-Invoice-Processor/tree/master/Frontend">here</a>.Clone the repo and make sure to install packages `express`, `aws-sdk` and `jade`. You can then run the command `node app.js` but you can find further instructions in the README given in that folder. <br>
+</div>
