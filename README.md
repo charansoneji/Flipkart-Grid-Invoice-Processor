@@ -12,17 +12,18 @@ In this Invoice processor solution, following approaches are used to provide for
   
 Follow the below given steps in order to understand how to install the entire infrastrcture of this solution of invoice processing.<br>
 If you are <strong>`testing`</strong> the given project, then head over to <strong>`SECTION B`</strong> but if you are looking at<br>
-<strong>`installing the given project`</strong>, head over to <strong>`SECTION A`</strong>.<br>
+**`installing the given project`**, head over to **`SECTION A`**.<br>
 ## SECTION A - Installing the project individually (on a seperate machine and a seperate AWS account)<br>
-<strong> Step 1: Creating an AWS account would be the first and most important step of this step.</strong><br>
+**Step 1: Creating an AWS account would be the first and most important step of this step.**<br>
 One of the important things to note as a newly signed user is about the <a href="https://aws.amazon.com/free">free tier</a> which you get when you sign up as a new user with AWS. You can read about it in the hyperlink mentioned above. Click <a href="https://aws.amazon.com/aispl/registration-confirmation">here</a> in order to register as a new AWS user. You can read about the free tier on the AWS page or using the link provided above.<br>
 
-<strong> Step 2: Open your AWS management console and search for the service called `Cloud Formation`. Click on `Create new Stack` and select the option which says, use a   predefined template. Now I have already defined the template which is available in this repository in `AWS STACK template` and is present as a JSON file. Copy the entire JSON file or attach it to Cloud Formation and wait for Cloud Formation to create the entire stack of resources that would be needed for the project.</strong><br>
+**Step 2: Open your AWS management console and search for the service called `Cloud Formation`.**<br> 
+Click on `Create new Stack` and select the option which says, use a predefined template. Now I have already defined the template which is available in this repository in `AWS STACK template` and is present as a JSON file. Copy the entire JSON file or attach it to Cloud Formation and wait for Cloud Formation to create the entire stack of resources that would be needed for the project.<br>
 Make sure to copy the entire JSON file and add the name of your required buckets or roles which are being defined which can be edited in the JSON.<br> 
 ###### Note: I have created the entire template based on the architecture that I had planned. You can adjust the JSON according to your requirement. The JSON is a very easy representation the architecture planned by me. It creates the roles required along with the database and the S3 bucket which would be needed. 
-<strong> Step 3: Cross check if all the resources have been successfully deployed by refreshing the Cloud Formation page and looking for the `Stack Created` option.</strong><br>
+**Step 3: Cross check if all the resources have been successfully deployed by refreshing the Cloud Formation page and looking for the `Stack Created` option.**<br>
 This is an important step and if any error occurs during this stage, an immediate rollback shall occur which would mean that the resources that have been created are being destroyed. At this stage, you would have to check your IAM policies and make sure that the user has sufficient access. You can click <a href="https://aws.amazon.com/iam/">here</a> to understand more about the IAM policies.<br>
-<strong> Step 4: You need to modify your CORS configuration in your S3 bucket. So head over to the S3 console and add the following configuration to your CORS config.</strong><br>
+**Step 4: You need to modify your CORS configuration in your S3 bucket. So head over to the S3 console and add the following configuration to your CORS config.**<br>
 You need to head on to the s3 bucket and in "Permissions", click on CORS configuration and copy paste the below given config:<br>
 ```
 <?xml version="1.0" encoding="UTF-8"?>
@@ -36,24 +37,34 @@ You need to head on to the s3 bucket and in "Permissions", click on CORS configu
     </CORSRule>
 </CORSConfiguration>
 ```
-<strong> Step 5: Testing the API gateway</strong><br>
+**Step 5: Testing the API gateway**<br>
 You can test the API by heading over to the AWS API Gateway and by clicking on the API created using the url and making use of any of the below given links:<br>
-<ul>
-  <li>Textract Job start by API Invocation: If you already have documents present in bucket, or not the owner of the bucket, you can still trigger the same workflow as above, by sending a request to Rest API method as follows: https://deployment-id.execute-api.us-east-1.amazonaws.com/demo/submittextanalysisjob?Bucket=your-bucket-name&Document=your-document-key You can find the deployment-id of the API from the stack output.</li><br>
- <li>Textract result retrieval via Rest API: If the initial submission goes well, and does not exceed provisioned throughput for maximum number of trials, result will be ready and post-processed within few seconds to minutes. At that point, the document analysis result can be retrieved by invoking Rest API method as follows: https://deployment-id.execute-api.us-east-1.amazonaws.com/demo/retrievedocumentanalysisresult?Bucket=your-bucket-name&Document=your-document-key&ResultType=ALL|TABLE|FORM. Similarly text detection result can be obtained by invoking Rest API method as follows: https://deployment-id.execute-api.us-east-1.amazonaws.com/demo/retrievetextdetectionresult?Bucket=your-bucket-name&Document=your-document-key You can find the deployment-id of the API from the stack output. In both cases, the API response will contain a list of files on S3 bucket where the results are stored for future use. You can also download and open the result files, either to inspect the contents manually, or to feed in to some downstream application/processes, as needed. </li>
- </ul>
-<strong> Step 6: Clone the Fronend in order to upload the invoice to s3 via an interface</strong><br>
-Click on the sub-repository named 'Frontend' or click <a href="http://github.com/charansoneji/Flipkart-Grid-Invoice-Processor/tree/master/Frontend/">here.</a>
-Clone the repo and make sure to install packages `express`, `aws-sdk` and `jade`. You can then run the command `node app.js` but you can find further instructions in the README given in that folder. <br>
-<div>
-<strong> Step 7: Test the API and retrieve all data in required format</strong><br>
+- Textract Job start by API Invocation: If you already have documents present in bucket, or not the owner of the bucket, you can still trigger the same workflow as above, by sending a request to Rest API method as follows: https://deployment-id.execute-api.us-east-1.amazonaws.com/demo/submittextanalysisjob?Bucket=your-bucket-name&Document=your-document-key You can find the deployment-id of the API from the stack output.<br>
+ - Textract result retrieval via Rest API: If the initial submission goes well, and does not exceed provisioned throughput for maximum number of trials, result will be ready and post-processed within few seconds to minutes. At that point, the document analysis result can be retrieved by invoking Rest API method as follows: https://deployment-id.execute-api.us-east-1.amazonaws.com/demo/retrievedocumentanalysisresult?Bucket=your-bucket-name&Document=your-document-key&ResultType=ALL|TABLE|FORM. Similarly text detection result can be obtained by invoking Rest API method as follows: https://deployment-id.execute-api.us-east-1.amazonaws.com/demo/retrievetextdetectionresult?Bucket=your-bucket-name&Document=your-document-key You can find the deployment-id of the API from the stack output. In both cases, the API response will contain a list of files on S3 bucket where the results are stored for future use. You can also download and open the result files, either to inspect the contents manually, or to feed in to some downstream application/processes, as needed.
+
+**Step 6: Clone the Fronend in order to upload the invoice to s3 via an interface**<br>
+Click on the sub-repository named 'Frontend' or click [here]("http://github.com/charansoneji/Flipkart-Grid-Invoice-Processor/tree/master/Frontend/"). Clone the repo and make sure to install packages `express`, `aws-sdk` and `jade`. You can then run the command `node app.js` but you can find further instructions in the README given in that folder. <br>
+
+**Step 7: Test the API and retrieve all data in required format**<br>
 So after you have uploaded the file to the S3 bucket using the frontend from Step 6, open the subrepository named Retrieve data and run the Python notebook.In case, you do not use Jupyter Notebook, you can run it on a normal python IDE but make sure to have these modules installed
-<ul>
-  <li>JSON</li>
-  <li>Pandas</li>
-  <li>Xlsxwriter</li>
-  <li>requests</li>
-  <li>openpysql</li>
-</ul>
- </div>
+  - JSON
+  - Pandas
+  - Xlsxwriter
+  - requests
+  - openpysql<br>
 You may use `pip` to install these libaries or could also use `conda install` to get these libraries installed.
+Once you have opened the notebook named "Output to Excel.ipynb" or "Output to Excel.py", run the cells individually or run the entire file. You will be asked to enter a fiename. So enter the name of the file which you have just uploaded. Make sure to check the suffix of the file i.e. ".pdf" at the end.
+###### Note: We have set up a file criteria of 4MB. This means that from the frontend, when you try to upload a file of size greater than 4MB, an error will be thrown instantly and you will not be allowed to upload the file.
+Please note that you may also use POSTMAN in order to verify the given links and obtain all the data in the form of JSON. The links that you would have to use are given below:
+- Table data: https://deployment-id.execute-api.us-east-1.amazonaws.com/demo/retrievedocumentanalysisresult?Bucket=your-bucket-name&Document=your-document-key&ResultType=TABLE
+- Form data: https://deployment-id.execute-api.us-east-1.amazonaws.com/demo/retrievedocumentanalysisresult?Bucket=your-bucket-name&Document=your-document-key&ResultType=FORM
+- All existing data on invoice: https://deployment-id.execute-api.us-east-1.amazonaws.com/demo/retrievedocumentanalysisresult?Bucket=your-bucket-name&Document=your-document-key&ResultType=ALL
+
+## SECTION B - Testing the project
+This is the easy step, all the config files containing the Secret Access Key and Access key ID has been set up. 
+- You need to clone the "Frontend" subrepository along with the "Retrieve data" repository. You can click [here]("https://github.com/charansoneji/Flipkart-Grid-Invoice-Processor/blob/master/Frontend/README.md") in order to get the steps on how to install the front end. A few dependencies are required which can be eaily installed using NPM. which have been mentioned above in Step 6.
+- The next step would be to run the Frontend
+- Upload the required S3 file using the interface given but *make sure to remember the filename* and *verify if the filesize is lesser than 4MB*.
+- Once you have received the upload success, wait for a couple of minutes before running the Output to Excel notbook or python file. and you should be able to see an excel sheet labelles as *invoice.xlsx* in the same directory.
+- In case you are using **POSTMAN** in order to obtain the results, use the REST API links given and copy the AWS credentials and mention them in the authentication section given [here]("https://github.com/charansoneji/Flipkart-Grid-Invoice-Processor/blob/master/Frontend/config.json").
+
