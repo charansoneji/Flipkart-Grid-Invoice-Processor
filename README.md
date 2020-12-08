@@ -52,7 +52,7 @@ So after you have uploaded the file to the S3 bucket using the frontend from Ste
   - Xlsxwriter
   - requests
   - openpysql<br>
-You may use `pip` to install these libaries or could also use `conda install` to get these libraries installed.
+You may use `pip` to install these libaries or could also use `conda install` to get these libraries installed. Based on the version required in your environment, you may write them to a requirements.txt file and then push the changes.
 Once you have opened the notebook named "Output to Excel.ipynb" or "Output to Excel.py", run the cells individually or run the entire file. You will be asked to enter a fiename. So enter the name of the file which you have just uploaded. Make sure to check the suffix of the file i.e. ".pdf" at the end.
 ###### Note: We have set up a file criteria of 4MB. This means that from the frontend, when you try to upload a file of size greater than 4MB, an error will be thrown instantly and you will not be allowed to upload the file.
 Please note that you may also use POSTMAN in order to verify the given links and obtain all the data in the form of JSON. The links that you would have to use are given below:
