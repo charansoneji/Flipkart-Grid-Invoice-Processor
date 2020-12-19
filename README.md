@@ -76,4 +76,5 @@ The user has to input the link and then all the details will be seen in the **in
 - Then we'll move on to the tabular data available. The tabular data will be available in the json format just like the form data. So again we will extract the required data from the json link and then save it in a temporary temporary excel sheet, named Sheet1.xlsx.
 - Now again the data from that temporary sheet will be automatically added to the **invoice.xlsx** according to the "if" conditions mentioned in the code. And even these conditions can always be edited for future invoices with different templates.
 - After running the code, when you open **invoice.xlsx**, you will be able to see all the data that has been extracted and added in the excel sheet.<br>
+The code can be modified if there are any specific changes in the format of the invoice.
 I hope this helps you!
